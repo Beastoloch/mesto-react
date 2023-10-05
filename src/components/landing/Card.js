@@ -9,7 +9,7 @@ class Card extends React.Component {
     render() {
         return(
             <article className="element">
-                <img className="element__image" alt="Ваша картинка" src={this.props.card.link} onClick={this.handleClick}/>
+                <img className="element__image" alt={this.props.card.name} src={this.props.card.link} onClick={this.handleClick}/>
                 <button className="element__delete-button" type="button"></button>
                 <div className="element__info">
                     <h3 className="element__title">{this.props.card.name}</h3>
