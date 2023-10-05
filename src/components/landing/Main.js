@@ -27,7 +27,6 @@ function Main(props) {
                 setCards(cardsData);
             })
     }, [])
-    console.log(cards);
     return (
         <main className="content">
             <section className="profile" id="profile">
