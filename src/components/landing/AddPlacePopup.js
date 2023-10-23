@@ -6,14 +6,17 @@ function AddPlacePopup(props) {
     const titleRef = useRef();
     const linkRef = useRef();
 
+    React.useEffect(() => {
+        titleRef.current.value = '';
+        linkRef.current.value = '';
+    }, [props.isOpen]);
+
     function handleSubmit(e) {
         e.preventDefault();
         props.onAddPlace({
             name: titleRef.current.value,
             link: linkRef.current.value
         });
-        titleRef.current.value = '';
-        linkRef.current.value = '';
     }
 
     return(

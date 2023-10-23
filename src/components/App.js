@@ -28,12 +28,28 @@ function App() {
             .then(user => {
                 setCurrentUser(user);
             })
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }, [])
+
+    useEffect(() => {
+        const close = (evt) => {
+            if(evt.key === 'Escape'){
+                closeAllPopups();
+            }
+        }
+        window.addEventListener('keydown', close)
+        return () => window.removeEventListener('keydown', close)
+    },[])
 
     useEffect(() => {
         api.getInitialCards()
             .then(value => {
                 setCards(value.reverse());
+            })
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
             })
     }, [])
 
@@ -67,44 +83,61 @@ function App() {
 
     const handleCardLike = (card) => {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            setCards((state) =>
-                state.map((c) =>
-                    c._id === card._id ? newCard : c));
-        })
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((state) =>
+                    state.map((c) =>
+                        c._id === card._id ? newCard : c));
+            })
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }
 
     const handleCardDelete = (card) => {
-        api.deleteCard(card._id).then((deletedCard) => {
-            setCards((state) =>
-                state.filter((c) =>
-                    c._id !== card._id))
-        })
-        closeAllPopups();
+        api.deleteCard(card._id)
+            .then((deletedCard) => {
+                setCards((state) =>
+                    state.filter((c) =>
+                        c._id !== card._id))
+                closeAllPopups();
+            })
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }
 
     const handleUpdateUser = (userInfo) => {
         api.setUserInfo(userInfo.name, userInfo.about)
             .then(user => {
                 setCurrentUser(user);
+                closeAllPopups();
             })
-        closeAllPopups();
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }
 
     const handleUpdateAvatar = (avatarLink) => {
         api.setUserAvatar(avatarLink)
             .then(user => {
                 setCurrentUser(user);
+                closeAllPopups();
             })
-        closeAllPopups();
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }
 
     const handleAddPlaceSubmit = (card) => {
         api.postNewCard(card.name, card.link)
             .then(newCard => {
                 setCards([newCard, ...cards]);
+                closeAllPopups();
             })
-        closeAllPopups();
+            .catch((err)=>{
+                console.log(`Ошибка...: ${err}`);
+            })
     }
 
     const closeAllPopups = () => {
@@ -115,7 +148,7 @@ function App() {
         setDeletePlacePopupState(false);
     }
     return (
-        <div className="page" onKeyDown={handleEscClose}>
+        <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
                 <Header />
                 <Main onCardClick={handleCardClick} onEditAvatar={handleEditAvatarClick}
