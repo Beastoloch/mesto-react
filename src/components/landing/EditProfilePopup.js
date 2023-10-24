@@ -11,7 +11,7 @@ function EditProfilePopup(props) {
     useEffect(() => {
         setName(currentUser.name);
         setDescription(currentUser.about);
-    }, [props.isOpen]);
+    }, [currentUser, props.isOpen]);
 
     function handleChangeName(e) {
         setName(e.target.value);

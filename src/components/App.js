@@ -17,6 +17,7 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
     const [isEditProfilePopupOpen, setEditProfilePopupState] = useState(false);
     const [isDeletePlacePopupOpen, setDeletePlacePopupState] = useState(false);
+    const [isAnyPopupOpen, setAnyPopupState] = useState(false);
     const [selectedCard, setSelectedCard] = useState({});
     const [cardToDelete, setCardToDelete] = useState({});
     const [isImagePopupOpen, setImagePopupState] = useState(false);
@@ -39,9 +40,9 @@ function App() {
                 closeAllPopups();
             }
         }
-        window.addEventListener('keydown', close)
+        window.addEventListener('keydown', close);
         return () => window.removeEventListener('keydown', close)
-    },[])
+    },[isAnyPopupOpen]);
 
     useEffect(() => {
         api.getInitialCards()
@@ -51,34 +52,33 @@ function App() {
             .catch((err)=>{
                 console.log(`Ошибка...: ${err}`);
             })
-    }, [])
+    }, []);
 
     const handleEditAvatarClick = () => {
         setEditAvatarPopupState(true);
+        setAnyPopupState(true);
     }
 
     const handleEditProfileClick = () => {
         setEditProfilePopupState(true);
+        setAnyPopupState(true);
     }
 
     const handleAddPlaceClick = () => {
         setAddPlacePopupState(true);
+        setAnyPopupState(true);
     }
 
     const handleDeletePlaceClick = (card) => {
         setDeletePlacePopupState(true);
+        setAnyPopupState(true);
         setCardToDelete(card);
     }
 
     const handleCardClick = (card) => {
         setSelectedCard(card);
         setImagePopupState(true);
-    }
-
-    const handleEscClose = (evt) => {
-        if(evt.key === 'Escape'){
-            closeAllPopups();
-        }
+        setAnyPopupState(true);
     }
 
     const handleCardLike = (card) => {
@@ -146,6 +146,7 @@ function App() {
         setAddPlacePopupState(false);
         setImagePopupState(false);
         setDeletePlacePopupState(false);
+        setAnyPopupState(false);
     }
     return (
         <div className="page">
